@@ -15,8 +15,6 @@ class OrderType extends AbstractType
             ->add('unity_price')
             ->add('total_price')
             ->add('quantity')
-            ->add('updatedAt')
-            ->add('createdAt')
             ->add('Product')
         ;
     }

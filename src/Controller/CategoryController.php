@@ -29,6 +29,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $category->setCreatedAt(new \DateTimeImmutable);
             $categoryRepository->add($category, true);
 
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
@@ -55,6 +56,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $category->setUpdatedAt(new \DateTimeImmutable);
             $categoryRepository->add($category, true);
 
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);

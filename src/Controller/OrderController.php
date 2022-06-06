@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\Product;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +29,13 @@ class OrderController extends AbstractController
         $form = $this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
+    
+
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $order->setCreatedAt(new \DateTimeImmutable);
+            
+
             $orderRepository->add($order, true);
 
             return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
@@ -55,6 +62,7 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $order->setUpdatedAt(new \DateTimeImmutable);
             $orderRepository->add($order, true);
 
             return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
