@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Order;
-use App\Entity\Product;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,11 +33,32 @@ class OrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $order->setCreatedAt(new \DateTimeImmutable);
-            
+            $product = $order->getProduct(); 
+
+            $uprice = $product->getPrice();
+            $order->setUnityPrice($uprice);
+
+            $pqte = $product->getQuantity();
+            $qte = $order->getQuantity();
+
+            $oqte = ($pqte-$qte);
+
+            if ($pqte >= $qte)
+            {
+                $product->setQuantity($oqte);
+                $order->setTotalPrice($qte*$uprice);
+
 
             $orderRepository->add($order, true);
 
             return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
+        }
+        else {
+            $this->addFlash(
+            'notice',
+            'Product quantity requested isnt available, try choosing a smaller quantity'
+        );
+        }
         }
 
         return $this->renderForm('order/new.html.twig', [
@@ -63,10 +83,31 @@ class OrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $order->setUpdatedAt(new \DateTimeImmutable);
+    
+            $product = $order->getProduct();            
+                
+                
+            $uprice = $product->getPrice();
+            $pqte = $product->getQuantity();
+            $qte = $order->getQuantity();
+            
+            $oqte = ($pqte-$qte);
+            if ($pqte >= $qte)
+            {
+            $product->setQuantity($oqte);
+            $order->setTotalPrice($qte*$uprice);
+            
             $orderRepository->add($order, true);
 
             return $this->redirectToRoute('app_order_index', [], Response::HTTP_SEE_OTHER);
-        }
+            }
+            else {
+                $this->addFlash(
+                'notice',
+                'Product quantity requested isnt available, try choosing a smaller quantity'
+            );
+            }                
+           }
 
         return $this->renderForm('order/edit.html.twig', [
             'order' => $order,

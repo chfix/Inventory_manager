@@ -108,4 +108,7 @@ class Order
 
         return $this;
     }
+    public function __toString() {
+        return $this->getProduct();
+    }
 }
