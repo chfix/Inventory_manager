@@ -5,23 +5,36 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ApiResource(
+    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'product:list']]],
+    itemOperations: ['get' => ['normalization_context' => ['groups' => 'product:item']]],
+    order: ['name' => 'ASC', 'price' => 'DESC'],
+    paginationEnabled: false,
+)]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['product:list', 'product:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Groups(['product:list', 'product:item'])]
     private $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['product:list', 'product:item'])]
     private $description;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['product:list', 'product:item'])]
     private $price;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -31,19 +44,24 @@ class Product
     private $active;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['product:list', 'product:item'])]
     private $updatedAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['product:list', 'product:item'])]
     private $createdAt;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['product:list', 'product:item'])]
     private $quantity;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'Products')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['product:list', 'product:item'])]  
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'Product', targetEntity: Order::class)]
+    #[Groups(['product:list', 'product:item'])]
     private $orders;
 
     public function __construct()

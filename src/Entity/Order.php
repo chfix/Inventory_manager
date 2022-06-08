@@ -3,33 +3,47 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+#[ApiResource(
+    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'order:list']]],
+    itemOperations: ['get' => ['normalization_context' => ['groups' => 'order:item']]],
+    paginationEnabled: false,
+)]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['order:list', 'order:item'])]
     private $id;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['order:list', 'order:item'])]
     private $unity_price;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['order:list', 'order:item'])]
     private $total_price;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['order:list', 'order:item'])]
     private $quantity;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['order:list', 'order:item'])]
     private $updatedAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['order:list', 'order:item'])]
     private $createdAt;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'orders')]
+    #[Groups(['order:list', 'order:item'])]
     private $Product;
 
     public function getId(): ?int
