@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Service\ImageUploader;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/product')]
 class ProductController extends AbstractController
@@ -22,16 +25,42 @@ class ProductController extends AbstractController
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ProductRepository $productRepository): Response
+    public function new(Request $request, ProductRepository $productRepository, ImageUploader $ImageUploader, SluggerInterface $slugger): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $product->setCreatedAt(new \DateTimeImmutable);
-            $productRepository->add($product, true);
 
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $product->setCreatedAt(new \DateTimeImmutable);
+
+                        /** @var UploadedFile $ProductImageFile */
+                        $ImagePFile = $form->get('image')->getData();
+
+                        // this condition is needed because the 'image' field is not required
+                        // so the image file must be processed only when a file is uploaded
+                        if ($ImagePFile) {
+                            $originalFilename = pathinfo($ImagePFile->getClientOriginalName(), PATHINFO_FILENAME);
+                            // this is needed to safely include the file name as part of the URL
+                            $safeFilename = $slugger->slug($originalFilename);
+                            $newFilename = $safeFilename.'-'.uniqid().'.'.$ImagePFile->guessExtension();
+            
+                            // Move the file to the directory where ImagePs are stored
+                                $ImagePFile->move(
+                                    $this->getParameter('upload_dir'),
+                                    $newFilename
+                                );
+
+            
+                            // updates the 'ImageFilename' property to store the PDF file name
+                            // instead of its contents
+                            $product->setImage($newFilename);
+                        }
+            
+            $productRepository->add($product, true);
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
