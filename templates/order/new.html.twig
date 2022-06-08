@@ -4,12 +4,15 @@
 
 {% block body %}
    {{ include('includes/navbar.html.twig')}}
+   <main class="container">
 
     <h1>Create new Order</h1>
 
     {{ include('order/_form.html.twig') }}
 
     <a class="btn btn-secondary" href="{{ path('app_order_index') }}">back to list</a>
+</main>
+
    {{ include('includes/footer.html.twig')}}
 
 {% endblock %}

@@ -4,25 +4,25 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private $Name;
-    
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
+    #[ORM\Column(type: 'string')]
+    private $password;
 
     public function getId(): ?int
     {
@@ -71,23 +71,26 @@ class User implements UserInterface
     }
 
     /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
      * @see UserInterface
      */
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->Name;
-    }
-
-    public function setName(string $Name): self
-    {
-        $this->Name = $Name;
-
-        return $this;
     }
 }

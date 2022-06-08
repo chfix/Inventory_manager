@@ -4,6 +4,7 @@
 
 {% block body %}
    {{ include('includes/navbar.html.twig')}}
+<main class="container">
     <h1>Category index</h1>
 
     <table class="table table-primary">
@@ -39,5 +40,6 @@
     </table>
 
     <a class="btn btn-primary" href="{{ path('app_category_new') }}">Create new</a>
+</main>
    {{ include('includes/footer.html.twig')}}
 {% endblock %}
