@@ -7,7 +7,7 @@
 <main class="container">
     <h1>Order index</h1>
 
-    <table class="table table-striped">
+    <table id="datatables" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Id</th>
@@ -29,8 +29,8 @@
                 <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_order_show', {'id': order.id}) }}">show</a>
-                    <a href="{{ path('app_order_edit', {'id': order.id}) }}">edit</a>
+                    <a class="btn btn-light" href="{{ path('app_order_show', {'id': order.id}) }}">show</a>
+                    <a class="btn btn-dark" href="{{ path('app_order_edit', {'id': order.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -39,6 +39,16 @@
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+                <th>Id</th>
+                <th>Unity_price</th>
+                <th>Total_price</th>
+                <th>Quantity</th>
+                <th>UpdatedAt</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+        </tfoot>
+
     </table>
 
     <a class="btn btn-primary" href="{{ path('app_order_new') }}">Create new</a>

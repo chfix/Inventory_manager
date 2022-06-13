@@ -17,6 +17,10 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "watch": "^1.0.2"
+        "datatables.net": "^1.12.1",
+        "datatables.net-bs5": "^1.12.1",
+        "sass": "^1.52.3",
+        "sass-loader": "^12.6.0",
+        "watch": "^0.13.0"
     }
 }
