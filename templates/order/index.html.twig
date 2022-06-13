@@ -11,11 +11,12 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Unity_price</th>
-                <th>Total_price</th>
+                <th>Product name</th>
+                <th>Unity price</th>
+                <th>Total price</th>
                 <th>Quantity</th>
-                <th>UpdatedAt</th>
-                <th>CreatedAt</th>
+                <th>Updated At</th>
+                <th>Created At</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
         {% for order in orders %}
             <tr>
                 <td>{{ order.id }}</td>
+                <td>{{ order.Product }}</td>
                 <td>{{ order.unityPrice }}</td>
                 <td>{{ order.totalPrice }}</td>
                 <td>{{ order.quantity }}</td>
@@ -41,11 +43,12 @@
         </tbody>
         <tfoot>
                 <th>Id</th>
-                <th>Unity_price</th>
-                <th>Total_price</th>
+                <th>Product name</th>
+                <th>Unity price</th>
+                <th>Total price</th>
                 <th>Quantity</th>
-                <th>UpdatedAt</th>
-                <th>CreatedAt</th>
+                <th>Updated At</th>
+                <th>Created At</th>
                 <th>actions</th>
         </tfoot>
 
