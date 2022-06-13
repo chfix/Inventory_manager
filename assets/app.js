@@ -8,4 +8,4 @@ import './bootstrap';
 import 'datatables.net';
 import 'datatables.net-bs5';
 
-$('#datatables').DataTable();
+$('#example').DataTable();
