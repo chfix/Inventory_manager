@@ -21,6 +21,7 @@
         "datatables.net-bs5": "^1.12.1",
         "sass": "^1.52.3",
         "sass-loader": "^12.6.0",
+        "select2": "^4.1.0-rc.0",
         "watch": "^0.13.0"
     }
 }
