@@ -9,10 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/category')]
 class CategoryController extends AbstractController
 {
+
+    #[Route('/ajax-categorie')]
+    public function AjaxAction(Request $request, CategoryRepository $categoryRepository): JsonResponse
+    {
+        
+        $argument = $request->query->get('q');
+        $category = $categoryRepository->findOneBy($argument);
+
+        foreach($category as $item) {
+
+            //if($category == $argument){
+             $results[] = array(
+                 'name' => $item->getName()
+             );
+        }
+    //}
+        return new JsonResponse($results);
+    
+    
+    }
+
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {

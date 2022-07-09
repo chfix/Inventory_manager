@@ -4,10 +4,48 @@
 
 {% block body %}
    {{ include('includes/navbar.html.twig')}}
+  
 <main class="container">
     <h1>Create new Product</h1>
 
     {{ include('product/_form.html.twig') }}
+
+
+ <script>
+
+   $(document).ready(
+$(".select2categorie").select2({
+
+   ajax: {
+    url: "/category/ajax-categorie",
+    dataType: 'json',
+    delay: 2500,
+    data: function (params) {
+      return {
+        q : params.term, // search term
+        page: params.page
+      };
+    },
+    processResults: function (data, params) {
+      // the remote JSON data, except to indicate that infinite
+      // scrolling can be used
+      params.page = params.page || 1;
+
+      return {
+        results: data.items,
+        pagination: {
+          more: (params.page * 10) < data.total_count
+        }
+      };
+    },
+  }
+
+
+
+})
+
+);
+</script>
 
     <a class="btn btn-secondary" href="{{ path('app_product_index') }}">back to list</a>
 </main>
