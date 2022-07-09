@@ -13,36 +13,39 @@
 
  <script>
 
-   $(document).ready(
-$(".select2categorie").select2({
+$(document).ready(
 
+$(".select2categorie").select2({
+  
    ajax: {
+
     url: "/category/ajax-categorie",
     dataType: 'json',
-    delay: 2500,
+    delay: 2100,
+    minimumInputLength: 1,
+    
     data: function (params) {
       return {
         q : params.term, // search term
-        page: params.page
       };
     },
     processResults: function (data, params) {
-      // the remote JSON data, except to indicate that infinite
-      // scrolling can be used
-      params.page = params.page || 1;
 
-      return {
-        results: data.items,
-        pagination: {
-          more: (params.page * 10) < data.total_count
-        }
-      };
+     return {
+                results: $.map(data, function (item) {
+                    return {
+                        id : item.id,
+                        text: item.name
+                        
+                  }
+                })
+            };
+      
     },
   }
+  }),
 
 
-
-})
 
 );
 </script>

@@ -2,15 +2,24 @@
 
 namespace App\Form;
 
+
 use App\Entity\Product;
+use App\Form\DataTransformer\CategorytoObjectTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ProductType extends AbstractType
 {
+    private $transformer;
+
+    public function __construct(CategorytoObjectTransformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -26,9 +35,10 @@ class ProductType extends AbstractType
             ->add('quantity')
             ->add('category', TextType::class, [
                 'mapped'=> true,
-                'attr' => ['class' => 'select2categorie', 'value' => '$cname'],
+                'attr' => ['class' => 'select2categorie'],
             ])
         ;
+        $builder->get('category')->addModelTransformer($this->transformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

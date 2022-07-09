@@ -16,20 +16,21 @@ class CategoryController extends AbstractController
 {
 
     #[Route('/ajax-categorie')]
-    public function AjaxAction(Request $request, CategoryRepository $categoryRepository): JsonResponse
+    public function AjaxAction(Request $request, CategoryRepository $categoryRepository)
     {
         
-        $argument = $request->query->get('q');
-        $category = $categoryRepository->findOneBy($argument);
+        $args = $request->query->get('q');
+        $category = $categoryRepository->SearchCategory($args);
 
         foreach($category as $item) {
 
-            //if($category == $argument){
+           
              $results[] = array(
-                 'name' => $item->getName()
+                'id'  => $item->getId(), 
+                'name' => $item->getName()
+                  
              );
         }
-    //}
         return new JsonResponse($results);
     
     
