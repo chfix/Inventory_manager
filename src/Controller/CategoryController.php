@@ -22,6 +22,13 @@ class CategoryController extends AbstractController
         $args = $request->query->get('q');
         $category = $categoryRepository->SearchCategory($args);
 
+        if($args == null) {
+            $response = new Response('Pas de categorie avec ce nom', Response::HTTP_OK);
+            return $response;
+        }
+        else {
+
+
         foreach($category as $item) {
 
            
@@ -31,8 +38,9 @@ class CategoryController extends AbstractController
                   
              );
         }
+
         return new JsonResponse($results);
-    
+        }
     
     }
 

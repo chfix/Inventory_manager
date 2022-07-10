@@ -12,10 +12,41 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/product')]
 class ProductController extends AbstractController
 {
+
+
+    
+    #[Route('/ajax-product')]
+    public function AjaxAction(Request $request, ProductRepository $productRepository)
+    {
+        
+        $args = $request->query->get('q');
+        $product = $productRepository->Searchproduct($args);
+
+        if($args == null) {
+            $response = new Response('Pas de Produit avec ce nom', Response::HTTP_OK);
+            return $response;
+        }
+        else {
+
+            foreach($product as $item) {
+        
+                $results[] = array(
+                   'id'  => $item->getId(), 
+                   'name' => $item->getName()
+                     
+                );
+               }
+
+            
+        return new JsonResponse($results);
+}
+    
+    }
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {

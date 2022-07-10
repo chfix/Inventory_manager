@@ -9,7 +9,44 @@
     <h1>Create new Order</h1>
 
     {{ include('order/_form.html.twig') }}
+ <script>
 
+$(document).ready(
+
+$(".select2product").select2({
+  
+   ajax: {
+
+    url: "/product/ajax-product",
+    dataType: 'json',
+    delay: 2100,
+    minimumInputLength: 1,
+    
+    data: function (params) {
+      return {
+        q : params.term, // search term
+      };
+    },
+    processResults: function (data, params) {
+
+     return {
+                results: $.map(data, function (item) {
+                    return {
+                        id : item.id,
+                        text: item.name
+                        
+                  }
+                })
+            };
+      
+    },
+  }
+  }),
+
+
+
+);
+</script>
     <a class="btn btn-secondary" href="{{ path('app_order_index') }}">back to list</a>
 </main>
 

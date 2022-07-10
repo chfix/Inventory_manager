@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class CategoryToObjectTransformer implements DataTransformerInterface
+class CategorytoObjectTransformer implements DataTransformerInterface
 {
     private $entityManager;
 
@@ -53,7 +53,7 @@ class CategoryToObjectTransformer implements DataTransformerInterface
             // this message is not shown to the user
             // see the invalid_message option
             throw new TransformationFailedException(sprintf(
-                'An category with number "%s" does not exist!',
+                'An category with name "%s" does not exist!',
                 $categoryform
             ));
         }
