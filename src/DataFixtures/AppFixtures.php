@@ -23,6 +23,7 @@ class AppFixtures extends Fixture
 
             $product = new Product();
             $product->setName('product '.$i);
+            $product->setActive(true);
             $product->setPrice(mt_rand(10, 100));
             $product->setQuantity(mt_rand(100, 2000));
             $product->setCategory($category);

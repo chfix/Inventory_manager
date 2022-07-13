@@ -9,16 +9,48 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/order')]
 class OrderController extends AbstractController
 {
-    #[Route('/', name: 'app_order_index', methods: ['GET'])]
-    public function index(OrderRepository $orderRepository): Response
+    #[Route('/ajax-order-dt')]
+    public function AjaxdtAction(OrderRepository $orderRepository): JsonResponse
     {
-        return $this->render('order/index.html.twig', [
-            'orders' => $orderRepository->findAll(),
-        ]);
+        
+        $Order = $orderRepository->findAll();
+
+        if($Order == null) {
+            $response = new Response('Pas de ordres disponibles', Response::HTTP_OK);
+            return $response;
+        }
+        else {
+
+
+        foreach($Order as $item) {
+
+           
+             $results[] = array(
+                'id'  => $item->getId(), 
+                'unity price' => $item->getUnityPrice(),
+                'total price' => $item->getTotalPrice(),
+                'quantity' => $item->getQuantity(),
+                'Created At' => $item->getCreatedAt(),
+                'Updated At' => $item->getUpdatedAt()
+                
+                  
+             );
+        }
+
+        return new JsonResponse($results);
+        }
+    
+    }
+
+    #[Route('/', name: 'app_order_index', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->render('order/index.html.twig');
     }
 
     #[Route('/new', name: 'app_order_new', methods: ['GET', 'POST'])]

@@ -14,6 +14,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/category')]
 class CategoryController extends AbstractController
 {
+    #[Route('/ajax-categorie-dt')]
+    public function AjaxdtAction(CategoryRepository $categoryRepository): JsonResponse
+    {
+        
+        $category = $categoryRepository->findAll();
+
+        if($category == null) {
+            $response = new Response('Pas de categories', Response::HTTP_OK);
+            return $response;
+        }
+        else {
+
+
+        foreach($category as $item) {
+
+           
+             $results[] = array(
+                'id'  => $item->getId(), 
+                'name' => $item->getName(),
+                'active' => $item->isActive(),
+                'Created At' => $item->getCreatedAt(),
+                'Updated At' => $item->getUpdatedAt()
+                
+                  
+             );
+        }
+
+        return new JsonResponse($results);
+        }
+    
+    }
 
     #[Route('/ajax-categorie')]
     public function AjaxAction(Request $request, CategoryRepository $categoryRepository)
@@ -45,11 +76,9 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(): Response
     {
-        return $this->render('category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
+        return $this->render('category/index.html.twig' );
     }
 
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]

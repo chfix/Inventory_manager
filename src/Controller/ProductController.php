@@ -17,6 +17,40 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/product')]
 class ProductController extends AbstractController
 {
+    #[Route('/ajax-product-dt')]
+    public function AjaxdtAction(ProductRepository $productRepository): JsonResponse
+    {
+        
+        $product = $productRepository->findAll();
+
+        if($product == null) {
+            $response = new Response('Pas de produits disponibles', Response::HTTP_OK);
+            return $response;
+        }
+        else {
+
+
+        foreach($product as $item) {
+
+           
+             $results[] = array(
+                'id'  => $item->getId(), 
+                'name' => $item->getName(),
+                'description' => $item->getDescription(),
+                'price' => $item->getPrice(),
+                'active' => $item->isActive(),
+                'quantity' => $item->getQuantity(),
+                'Created At' => $item->getCreatedAt(),
+                'Updated At' => $item->getUpdatedAt()
+                
+                  
+             );
+        }
+
+        return new JsonResponse($results);
+        }
+    
+    }
 
 
     
@@ -48,11 +82,9 @@ class ProductController extends AbstractController
     
     }
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
-        ]);
+        return $this->render('product/index.html.twig');
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]

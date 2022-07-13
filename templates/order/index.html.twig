@@ -2,54 +2,56 @@
 
 {% block title %}Order index{% endblock %}
 
+{% block javascripts %}
+<script>
+$(document).ready(function () {
+    $('#order_dt').DataTable({
+        ajax: {
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            type: "GET",
+            url:"/order/ajax-order-dt"
+        },
+        sAjaxSource: "",
+        sAjaxDataProp: "",
+        columns: [
+        { data: 'id'  },
+        { data: 'unity price' },
+        { data: 'total price' },
+        { data: 'quantity' },
+        { data: 'Created At.date' },
+        { data: 'Updated At.date' } ,
+                  ],
+
+    });
+});
+</script>
+{% endblock %}
+
 {% block body %}
    {{ include('includes/navbar.html.twig')}}
 <main class="container">
     <h1>Order index</h1>
 
-    <table id="example" class="table table-striped" style="width:100%">
+    <table id="order_dt" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Product name</th>
                 <th>Unity price</th>
                 <th>Total price</th>
                 <th>Quantity</th>
-                <th>Updated At</th>
-                <th>Created At</th>
-                <th>actions</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
             </tr>
         </thead>
-        <tbody>
-        {% for order in orders %}
-            <tr>
-                <td>{{ order.id }}</td>
-                <td>{{ order.Product }}</td>
-                <td>{{ order.unityPrice }}</td>
-                <td>{{ order.totalPrice }}</td>
-                <td>{{ order.quantity }}</td>
-                <td>{{ order.updatedAt ? order.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a class="btn btn-light" href="{{ path('app_order_show', {'id': order.id}) }}">show</a>
-                    <a class="btn btn-dark" href="{{ path('app_order_edit', {'id': order.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+        
         <tfoot>
                 <th>Id</th>
-                <th>Product name</th>
                 <th>Unity price</th>
                 <th>Total price</th>
                 <th>Quantity</th>
-                <th>Updated At</th>
-                <th>Created At</th>
-                <th>actions</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
         </tfoot>
 
     </table>
